@@ -1,20 +1,15 @@
-import { readContacts } from '../utils/readContacts.js';
-import { PATH_DB } from '../constants/contacts.js';
 import * as fs from 'node:fs/promises';
+import { PATH_DB } from '../constants/contacts.js';
 
-export const writeContacts = async (updatedContacts) => {
+export const writeContacts = async (contacts) => {
   try {
-    const existingContacts = await readContacts();
-    if (existingContacts) {
-      existingContacts.push(...updatedContacts);
-      await fs.writeFile(PATH_DB, JSON.stringify(existingContacts, null, 2), {
-        encoding: 'utf-8',
-      });
-      console.log('Contacts have been written successfully.');
-    } else {
-      console.error('No existing contacts to update.');
-    }
+    // Прямо записуємо масив контактів, не додаючи до існуючих
+    await fs.writeFile(PATH_DB, JSON.stringify(contacts, null, 2), {
+      encoding: 'utf-8',
+    });
+    console.log('Contacts have been written successfully.');
   } catch (error) {
     console.error('Error writing contacts:', error);
   }
 };
+
